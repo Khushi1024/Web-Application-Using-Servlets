@@ -1,0 +1,124 @@
+import java.util.*;
+
+public class WebAppSimulation {
+    static Scanner sc = new Scanner(System.in);
+
+    static class User {
+        String username, password;
+        User(String u, String p) { username = u; password = p; }
+    }
+
+    static class Employee {
+        int id;
+        String name, department;
+        Employee(int i, String n, String d) { id = i; name = n; department = d; }
+    }
+
+    static class Attendance {
+        String studentId, name, date, status;
+        Attendance(String s, String n, String d, String st) {
+            studentId = s; name = n; date = d; status = st;
+        }
+    }
+
+    static List<User> users = new ArrayList<>();
+    static List<Employee> employees = new ArrayList<>();
+    static List<Attendance> attendanceList = new ArrayList<>();
+
+    public static void main(String[] args) {
+        seedData();
+        while (true) {
+            System.out.println("\n=== MENU ===");
+            System.out.println("1. User Login");
+            System.out.println("2. Display Employees");
+            System.out.println("3. Search Employee by ID");
+            System.out.println("4. Record Student Attendance");
+            System.out.println("5. View Attendance Records");
+            System.out.println("6. Exit");
+            System.out.print("Enter choice: ");
+            int ch = sc.nextInt();
+            sc.nextLine();
+            switch (ch) {
+                case 1: loginUser(); break;
+                case 2: displayEmployees(); break;
+                case 3: searchEmployee(); break;
+                case 4: recordAttendance(); break;
+                case 5: viewAttendance(); break;
+                case 6: System.exit(0);
+                default: System.out.println("Invalid choice");
+            }
+        }
+    }
+
+    static void seedData() {
+        users.add(new User("admin", "admin"));
+        users.add(new User("user", "1234"));
+        employees.add(new Employee(1, "John", "IT"));
+        employees.add(new Employee(2, "Sara", "HR"));
+        employees.add(new Employee(3, "Mike", "Finance"));
+    }
+
+    static void loginUser() {
+        System.out.print("Enter username: ");
+        String u = sc.nextLine();
+        System.out.print("Enter password: ");
+        String p = sc.nextLine();
+        boolean found = false;
+        for (User user : users) {
+            if (user.username.equals(u) && user.password.equals(p)) {
+                found = true;
+                break;
+            }
+        }
+        if (found) System.out.println("Login Successful");
+        else System.out.println("Invalid Credentials");
+    }
+
+    static void displayEmployees() {
+        System.out.println("\nID\tName\tDepartment");
+        for (Employee e : employees) {
+            System.out.println(e.id + "\t" + e.name + "\t" + e.department);
+        }
+    }
+
+    static void searchEmployee() {
+        System.out.print("Enter Employee ID: ");
+        int id = sc.nextInt();
+        sc.nextLine();
+        boolean found = false;
+        for (Employee e : employees) {
+            if (e.id == id) {
+                System.out.println("ID: " + e.id);
+                System.out.println("Name: " + e.name);
+                System.out.println("Department: " + e.department);
+                found = true;
+                break;
+            }
+        }
+        if (!found) System.out.println("No employee found with ID " + id);
+    }
+
+    static void recordAttendance() {
+        System.out.print("Enter Student ID: ");
+        String sid = sc.nextLine();
+        System.out.print("Enter Name: ");
+        String sname = sc.nextLine();
+        System.out.print("Enter Date (YYYY-MM-DD): ");
+        String date = sc.nextLine();
+        System.out.print("Enter Status (Present/Absent): ");
+        String status = sc.nextLine();
+        attendanceList.add(new Attendance(sid, sname, date, status));
+        System.out.println("Attendance Recorded Successfully");
+    }
+
+    static void viewAttendance() {
+        if (attendanceList.isEmpty()) {
+            System.out.println("No attendance records found.");
+            return;
+        }
+        System.out.println("\nStudentID\tName\tDate\t\tStatus");
+        for (Attendance a : attendanceList) {
+            System.out.println(a.studentId + "\t\t" + a.name + "\t" + a.date + "\t" + a.status);
+        }
+    }
+}
